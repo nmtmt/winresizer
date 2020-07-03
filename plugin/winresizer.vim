@@ -203,7 +203,7 @@ fun! s:startResize(commands, is_gui)
 
   while 1
 
-    echo '[window ' . l:commands['mode'] . ' mode]... "'.s:label_finish.'": OK , "'.s:label_mode.'": Change mode , "'.s:label_cancel.'": Cancel '
+    echo printf('[winresizer mode: %-6s]... finish:%s, switch-mode:%s, cancel:%s', l:commands['mode'], s:label_finish, s:label_mode, s:label_cancel)
 
     let c = getchar()
 
@@ -226,7 +226,7 @@ fun! s:startResize(commands, is_gui)
     elseif c == g:winresizer_keycode_cancel "q
       exe l:commands['cancel']
       redraw
-      echo "Canceled!"
+      echo "[winresizer] canceled"
       break
     elseif c == s:codeList['mode']
       if l:commands['mode'] == 'move'
@@ -238,7 +238,7 @@ fun! s:startResize(commands, is_gui)
       endif
     elseif c == g:winresizer_keycode_finish || (g:winresizer_finish_with_escape == 1 && c == g:winresizer_keycode_escape)
       redraw
-      echo "Finished!"
+      echo "[winresizer] finished"
       break
     endif
     redraw
