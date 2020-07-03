@@ -66,7 +66,7 @@ let g:winresizer_enable     = get(g:, 'winresizer_enable', 1)
 " for gui setting
 let s:default_gui_start_key = '<C-A>'
 let g:winresizer_gui_start_key = get(g:, 'winresizer_gui_start_key', s:default_gui_start_key)
-let g:winresizer_gui_enable = get(g:, 'winresizer_gui_enable', 0)
+let g:winresizer_gui_enable    = get(g:, 'winresizer_gui_enable', 0)
 
 let g:winresizer_vert_resize  = get(g:, 'winresizer_vert_resize', 10)
 let g:winresizer_horiz_resize = get(g:, 'winresizer_horiz_resize', 3)
@@ -87,45 +87,34 @@ let s:default_keycode = {
              \           'mode'  :'101',
              \          }
 
-let g:winresizer_keycode_focus = get(g:, 'winresizer_keycode_focus', s:default_keycode['focus'])
-let g:winresizer_keycode_move  = get(g:, 'winresizer_keycode_move', s:default_keycode['move'])
+let g:winresizer_keycode_focus  = get(g:, 'winresizer_keycode_focus', s:default_keycode['focus'])
+let g:winresizer_keycode_move   = get(g:, 'winresizer_keycode_move', s:default_keycode['move'])
 let g:winresizer_keycode_resize = get(g:, 'winresizer_keycode_resize', s:default_keycode['resize'])
-let g:winresizer_keycode_left  = get(g:, 'winresizer_keycode_left', s:default_keycode['left'])
-let g:winresizer_keycode_down  = get(g:, 'winresizer_keycode_down',  s:default_keycode['down'])
-let g:winresizer_keycode_up    = get(g:, 'winresizer_keycode_up',    s:default_keycode['up'])
-let g:winresizer_keycode_right = get(g:, 'winresizer_keycode_right', s:default_keycode['right'])
+let g:winresizer_keycode_left   = get(g:, 'winresizer_keycode_left', s:default_keycode['left'])
+let g:winresizer_keycode_down   = get(g:, 'winresizer_keycode_down',  s:default_keycode['down'])
+let g:winresizer_keycode_up     = get(g:, 'winresizer_keycode_up',    s:default_keycode['up'])
+let g:winresizer_keycode_right  = get(g:, 'winresizer_keycode_right', s:default_keycode['right'])
 
 let g:winresizer_keycode_finish = get(g:, 'winresizer_keycode_finish', s:default_keycode['finish'])
 let g:winresizer_keycode_cancel = get(g:, 'winresizer_keycode_cancel', s:default_keycode['cancel'])
 let g:winresizer_keycode_escape = get(g:, 'winresizer_keycode_escape', s:default_keycode['escape'])
-let g:winresizer_keycode_enter = get(g:, 'winresizer_keycode_enter', s:default_keycode['enter'])
+let g:winresizer_keycode_enter  = get(g:, 'winresizer_keycode_enter', s:default_keycode['enter'])
 let g:winresizer_keycode_mode   = get(g:, 'winresizer_keycode_mode', s:default_keycode['mode'])
 
 " if <ESC> key downed, finish resize mode
 let g:winresizer_finish_with_escape = get(g:, 'winresizer_finish_with_escape', 1)
 
 let s:codeList = {
-        \  'left' : g:winresizer_keycode_left,
-        \  'down' : g:winresizer_keycode_down,
-        \  'up'   : g:winresizer_keycode_up,
-        \  'right': g:winresizer_keycode_right,
-        \  'focus': g:winresizer_keycode_focus,
-        \  'move': g:winresizer_keycode_move,
+        \  'left'  : g:winresizer_keycode_left,
+        \  'down'  : g:winresizer_keycode_down,
+        \  'up'    : g:winresizer_keycode_up,
+        \  'right' : g:winresizer_keycode_right,
+        \  'focus' : g:winresizer_keycode_focus,
+        \  'move'  : g:winresizer_keycode_move,
         \  'resize': g:winresizer_keycode_resize,
-        \  'enter': g:winresizer_keycode_enter,
-        \  'mode' : g:winresizer_keycode_mode,
+        \  'enter' : g:winresizer_keycode_enter,
+        \  'mode'  : g:winresizer_keycode_mode,
         \}
-
-exe 'nnoremap ' . g:winresizer_start_key .' :WinResizerStartResize<CR>'
-
-com! WinResizerStartResize call s:startResize(s:tuiResizeCommands(), 0)
-com! WinResizerStartMove call s:startResize(s:moveCommands(), 0)
-com! WinResizerStartFocus call s:startResize(s:focusCommands(), 0)
-
-if has("gui_running")
-  exe 'nnoremap ' . g:winresizer_gui_start_key .' :WinResizerStartResizeGUI<CR>'
-  com! WinResizerStartResizeGUI call s:startResize(s:guiResizeCommands(), 1)
-endif
 
 fun! s:guiResizeCommands()
 
@@ -282,8 +271,28 @@ fun! s:getKeyAlias(code)
   return alias
 endfun
 
+com! WinResizerStartResize call s:startResize(s:tuiResizeCommands(), 0)
+com! WinResizerStartMove   call s:startResize(s:moveCommands(), 0)
+com! WinResizerStartFocus  call s:startResize(s:focusCommands(), 0)
+
+nnoremap <Plug>(winresizer_start_resize) :<C-U>WinResizerStartResize<CR>
+nnoremap <Plug>(winresizer_start_move)   :<C-U>WinResizerStartMove<CR>
+nnoremap <Plug>(winresizer_start_focus)  :<C-U>WinResizerStartFocus<CR>
+
+if has("gui_running")
+  com! WinResizerStartResizeGUI call s:startResize(s:guiResizeCommands(), 1)
+  nnoremap <Plug>(winresizer_start_resize_gui)  :<C-U>WinResizerStartResizeGUI<CR>
+endif
+
+if !exists("g:winresizer_no_mappings") || ! g:winresizer_no_mappings
+  exe 'nmap' . g:winresizer_start_key . ' <Plug>(winresizer_start_resize)'
+  if has("gui_running")
+    exe 'nmap' . g:winresizer_gui_start_key . ' <Plug>(winresizer_start_resize_gui)'
+  endif
+endif
+
 let s:label_finish = s:getKeyAlias(g:winresizer_keycode_finish)
 let s:label_cancel = s:getKeyAlias(g:winresizer_keycode_cancel)
-let s:label_mode = s:getKeyAlias(g:winresizer_keycode_mode)
+let s:label_mode   = s:getKeyAlias(g:winresizer_keycode_mode)
 
 let &cpo = s:save_cpo
