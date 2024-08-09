@@ -46,7 +46,9 @@ Focus mode -> Resize mode
 
 ## Customize options
 
-You can change setting and key mappings by using below options.(in your vimrc)
+You can change settings and key mappings by using below options.(in your vimrc).
+
+The key values are ASCII values. You can find a list of mappings [here](https://www.cs.cmu.edu/~pattis/15-1XX/common/handouts/ascii.html).
 
 |variable name|default value|description|
 |:-----------|:---------:|:----------|
@@ -82,5 +84,10 @@ let g:winresizer_gui_enable = 1
     " If you want to start window resize mode by `Ctrl+T`
     let g:winresizer_start_key = '<C-T>'
     
-    " If you cancel and quit window resize mode by `z` (keycode 122)
+    " If you want to cancel and quit window resize mode by `z` (keycode 122)
     let g:winresizer_keycode_cancel = 122
+
+    " To expand your window size toward upper using upper arrow (instead of k)
+    let g:winresizer_keycode_up = "\<UP>"
+    " To expand your window size toward lower using down arrow (instead of j)
+    let g:winresizer_keycode_down = "\<DOWN>"
